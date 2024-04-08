@@ -5,6 +5,15 @@ import { AccountRepository } from "../account-repository";
 export class PostgresAccountRepository implements AccountRepository {
   constructor(readonly connection: DatabaseConnection) {}
 
+  async findById(id: string): Promise<Account | undefined> {
+    const [account] = await this.connection.query(
+      "select * from cccat16.account where account_id = $1",
+      [id]
+    );
+
+    return account;
+  }
+
   async findByEmail(email: string): Promise<Account | undefined> {
     const [account] = await this.connection.query(
       "select * from cccat16.account where email = $1",
